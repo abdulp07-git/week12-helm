@@ -125,10 +125,17 @@ pipeline {
     fi
     
     # Push the Helm chart to the ECR repository
-    helm push ${CHART_NAME}-*.tgz oci://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+    helm push ${CHART_NAME}-0.1.${BUILD_NUMBER}.tgz oci://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 """
                 }
             }
+        
+            post {
+                always {
+                    sh 'rm -f ${CHART_NAME}-0.1.${BUILD_NUMBER}.tgz'
+                }
+            }
+            
         }
         
         
@@ -140,3 +147,4 @@ pipeline {
         
     }
 }
+
