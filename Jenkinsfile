@@ -1,3 +1,5 @@
+//https://docs.aws.amazon.com/AmazonECR/latest/userguide/push-oci-artifact.html
+
 pipeline {
     
     agent { 

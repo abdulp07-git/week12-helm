@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: abdulp07/tomcat_helm 
+  repository: abdulp07/tomcat_helm
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v5"
+  tag: "v30"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -40,8 +40,8 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  port: 8080
 
 ingress:
   enabled: false
