@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPA CPU Load Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #status {
+            font-size: 24px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>HPA CPU Load Test</h1>
+    <p>This page will continuously consume CPU to test the HPA in your Kubernetes cluster.</p>
+    <p id="status">Running CPU-intensive task...</p>
+    <script>
+        function consumeCPU() {
+            // A CPU-intensive task that runs in a loop
+            let start = Date.now();
+            while (Date.now() - start < 1000) {
+                // Busy loop for 1 second to consume CPU
+                Math.sqrt(Math.random());
+            }
+            // Repeat the task continuously
+            setTimeout(consumeCPU, 0);
+        }
+
+        // Start consuming CPU
+        consumeCPU();
+    </script>
+</body>
+</html>
+
