@@ -40,7 +40,7 @@
     Dtime = Time.toString();
 %>
 
-<h2> Server Info Helm Version 30</h2>
+<h2> Server Info Helm Version 32</h2>
 <hr>
 
 <div>
