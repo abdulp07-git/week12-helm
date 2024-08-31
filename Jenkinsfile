@@ -138,15 +138,23 @@ pipeline {
                 }
             }
             
+        }        
+        
+        
+    } // stages closed
+
+
+    post {
+        success {
+            script {
+                // Trigger the Deploy pipeline and pass the current Build number
+                build job: 'week12-helm-deploy', parameters: [
+                    string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}")
+                ]
+            }
         }
-        
-        
-        
-        
-        
-        
-        
-        
     }
-}
+
+
+}//Pipeline closed
 
