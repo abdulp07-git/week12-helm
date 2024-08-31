@@ -1,0 +1,58 @@
+pipeline {
+    agent {
+        label 'deploy'
+    }
+    
+    parameters {
+        string(name: 'BUILD_NUMBER', defaultValue: '', description: 'Build number from the Build pipeline')
+    }
+    
+    
+    
+    environment {
+        CHART_NAME = "mavenwebapp"
+        AWS_DEFAULT_REGION = "ap-south-1"
+        AWS_CREDENTIALS_ID = "aws-ecr-credentials"
+        AWS_ACCOUNT_ID = "021891584638"
+        ECR_REGION = "ap-south-1"
+        ECR_REPO = 'oci://021891584638.dkr.ecr.ap-south-1.amazonaws.com'
+        
+
+    }
+
+    stages {
+        
+        stage('clean up old chart if exist') {
+            steps {
+
+                sh 'rm -rf ${CHART_NAME}'
+            }
+        }
+        
+        stage('PULL latest version from ECR'){
+            steps {
+                sh "helm pull ${ECR_REPO}/${CHART_NAME} --version 0.1.${BUILD_NUMBER} --untar"
+            }
+        }
+        
+        stage('Install or Upgrade chart'){
+            steps {
+                script {
+                    // Check if a release with the same name is already deployed
+                    def releaseExists = sh(script: "helm list -q | grep -w ${CHART_NAME}", returnStatus: true) == 0
+                    
+                    if (releaseExists) {
+                        // Upgrade the existing deployment
+                        sh "helm upgrade ${CHART_NAME} ./${CHART_NAME} --version 0.1.${BUILD_NUMBER}"
+                    } else {
+                        // Install a new deployment
+                        sh "helm install ${CHART_NAME} ./${CHART_NAME} --version 0.1.${BUILD_NUMBER}"
+                    }
+                    
+                }
+            }
+        }
+        
+    }
+}
+
