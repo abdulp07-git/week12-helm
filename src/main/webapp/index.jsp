@@ -93,7 +93,7 @@
 </div>
 
 <div class="container">
-    <h2>Server Information</h2>
+    <h2>Server Information Review</h2>
     <div>
         <p><strong>Host Name:</strong> <span><%= hostName %></span></p>
         <p><strong>IP Address:</strong> <span><%= ipAddr %></span></p>
