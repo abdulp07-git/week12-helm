@@ -11,95 +11,150 @@
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
         }
 
-        table, td, tr {
-            border: 1px solid;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .button-link {
+            text-decoration: none;
+            color: white;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .button-link:hover {
+            background-color: #003f7f;
+        }
+
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border: 1px solid #ddd;
             border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f8f8f8;
         }
 
         span {
             font-weight: normal;
-            font-size: 16px;
-            color: black;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
 <%
-    String hostName;
-    String serverName;
-    String ipAddr;
-    Date Time;
-    String Dtime;
-    hostName = InetAddress.getLocalHost().getHostName();
-    ipAddr = InetAddress.getLocalHost().getHostAddress();
-    serverName = System.getProperty("java.vm.name");
-    Time = new Date();
-    Dtime = Time.toString();
+    String hostName = InetAddress.getLocalHost().getHostName();
+    String ipAddr = InetAddress.getLocalHost().getHostAddress();
+    String serverName = System.getProperty("java.vm.name");
+    Date Time = new Date();
+    String Dtime = Time.toString();
 %>
 
-<h2> Server Info Ingress with HPA</h2>
-<hr>
-
-<div>
-    <h4>Host Name : <span><%=  hostName %></span></h4>
-    <h4>IP Address: <span><%=  ipAddr %></span></h4>
-    <h4>JVM Name: <span><%=  serverName %></span></h4>
-    <h4> Date & Time: <span> <%= Dtime %></h4>
+<div class="header">
+    <a href="http://intodepth.in" class="button-link">JAVA</a>
+    <a href="http://intodepth.in/nginx" class="button-link">NGINX</a>
 </div>
 
-<h4>HTTP Request URL : <span><%= request.getRequestURL() %></span></h4>
-<h4>HTTP Request Method : <span><%= request.getMethod() %></span></h4>
+<div class="container">
+    <h2>Server Information</h2>
+    <div>
+        <p><strong>Host Name:</strong> <span><%= hostName %></span></p>
+        <p><strong>IP Address:</strong> <span><%= ipAddr %></span></p>
+        <p><strong>JVM Name:</strong> <span><%= serverName %></span></p>
+        <p><strong>Date & Time:</strong> <span><%= Dtime %></span></p>
+    </div>
+</div>
 
-<h4>HTTP Request Headers Received</h4>
+<div class="container">
+    <h2>HTTP Request Information</h2>
+    <p><strong>Request URL:</strong> <span><%= request.getRequestURL() %></span></p>
+    <p><strong>Request Method:</strong> <span><%= request.getMethod() %></span></p>
 
-<table>
-    <%
-        Enumeration enumeration = request.getHeaderNames();
-        while (enumeration.hasMoreElements()) {
-            String name = (String)
-                    enumeration.nextElement();
-            String value = request.getHeader(name);
-    %>
-    <tr>
-        <td>
-            <%=name %>
-        </td>
-        <td>
-            <%=value %>
-        </td>
-    </tr>
-    <% } %>
-</table>
+    <h3>Request Headers</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Header Name</th>
+                <th>Header Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                Enumeration enumeration = request.getHeaderNames();
+                while (enumeration.hasMoreElements()) {
+                    String name = (String) enumeration.nextElement();
+                    String value = request.getHeader(name);
+            %>
+            <tr>
+                <td><%= name %></td>
+                <td><%= value %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
 
-<h4>HTTP Cookies Received</h4>
-
-<table>
-    <%
-
-        Cookie[] arr1 = request.getCookies();
-        String cookiename = "";
-        String cookievalue ="";
-        if ((arr1 != null) && (arr1.length > 0))  {
-        for (int i = 0; i < arr1.length; i++) {
-            cookiename = arr1[i].getName();
-            cookievalue = arr1[i].getValue();
-        }
-
-    %>
-    <tr>
-        <td>
-            <%=cookiename %>
-        </td>
-        <td>
-            <%=cookievalue %>
-        </td>
-    </tr>
-    <% } %>
-</table>
-
+    <h3>Cookies Received</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Cookie Name</th>
+                <th>Cookie Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null && cookies.length > 0) {
+                    for (Cookie cookie : cookies) {
+            %>
+            <tr>
+                <td><%= cookie.getName() %></td>
+                <td><%= cookie.getValue() %></td>
+            </tr>
+            <%      }
+                }
+            %>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
+
