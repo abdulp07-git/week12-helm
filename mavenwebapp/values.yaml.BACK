@@ -56,7 +56,7 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
           backend:
-            serviceName: mavenwebapp
+            serviceName: tomcat-mavenwebapp
             servicePort: 8080
   tls: []
   #  - secretName: chart-example-tls
